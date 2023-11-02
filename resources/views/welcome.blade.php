@@ -110,73 +110,73 @@
         </div>
     </nav>
 
-    @if (empty($feedbacks))
-        @foreach ($feedbacks as $item)
-            <div class="container mt-5 mb-5">
-                <div class="d-flex justify-content-center row">
-                    <div class="d-flex flex-column col-md-8">
-                        <div
-                            class="d-flex flex-row align-items-center text-left comment-top p-2 bg-white border-bottom px-4">
-                            <div class="d-flex flex-column-reverse flex-grow-0 align-items-center votings ml-1">
-                                <i class="fa fa-sort-up fa-2x hit-voting voteCount"
-                                    style="{{ Auth::check() ? ($item->user_id === Auth::id() ? 'pointer-events: none;' : '') : 'pointer-events: none;' }}"
-                                    data-feedback-id="{{ $item->id }}"></i>
+    @foreach ($feedbacks as $item)
+        <div class="container mt-5 mb-5">
+            <div class="d-flex justify-content-center row">
+                <div class="d-flex flex-column col-md-8">
+                    <div
+                        class="d-flex flex-row align-items-center text-left comment-top p-2 bg-white border-bottom px-4">
+                        <div class="d-flex flex-column-reverse flex-grow-0 align-items-center votings ml-1">
+                            <i class="fa fa-sort-up fa-2x hit-voting voteCount"
+                                style="{{ Auth::check() ? ($item->user_id === Auth::id() ? 'pointer-events: none;' : '') : 'pointer-events: none;' }}"
+                                data-feedback-id="{{ $item->id }}"></i>
 
-                                <span class="vote-count-display">{{ $item->votes->count() }}</span>
+                            <span class="vote-count-display">{{ $item->votes->count() }}</span>
+                        </div>
+                        <div class="d-flex flex-column ml-3">
+                            <div class="d-flex flex-row post-title">
+                                <h5>{{ $item->user->name }}</h5><span class="ml-2">({{ $item->title }})</span>
                             </div>
-                            <div class="d-flex flex-column ml-3">
-                                <div class="d-flex flex-row post-title">
-                                    <h5>{{ $item->user->name }}</h5><span class="ml-2">({{ $item->title }})</span>
-                                </div>
 
-                                <div class="comment-text-sm mb-2"><span>{{ $item->description }}</span></div>
+                            <div class="comment-text-sm mb-2"><span>{{ $item->description }}</span></div>
 
-                                <div class="d-flex flex-row align-items-center align-content-center post-title">
-                                    <span class="mr-2 comments">{{ $item->comments->count() }} comments&nbsp;</span>
-                                    <span class="mr-2 dot"></span><span>{{ $item->created_at }}</span>
-                                </div>
+                            <div class="d-flex flex-row align-items-center align-content-center post-title">
+                                <span class="mr-2 comments">{{ $item->comments->count() }} comments&nbsp;</span>
+                                <span class="mr-2 dot"></span><span>{{ $item->created_at }}</span>
                             </div>
                         </div>
-                        <div class="coment-bottom bg-white p-2 px-4">
-                            @if ($item->comment === 1)
-                                @if (Auth::check())
-                                    <div class="d-flex flex-row add-comment-section mt-4 mb-4">
-                                        <input type="text" class="form-control mr-3 mainCommentTextarea"
-                                            placeholder="Add comment">
-                                        <button class="btn btn-primary mainCommentSubmit" type="button"
-                                            data-feedback-id="{{ $item->id }}">Comment</button>
-                                    </div>
-                                @else
-                                    <div class="alert alert-info">
-                                        Please login for comments and vote
-                                    </div>
-                                @endif
+                    </div>
+                    <div class="coment-bottom bg-white p-2 px-4">
+                        @if ($item->comment === 1)
+                            @if (Auth::check())
+                                <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                                    <input type="text" class="form-control mr-3 mainCommentTextarea"
+                                        placeholder="Add comment">
+                                    <button class="btn btn-primary mainCommentSubmit" type="button"
+                                        data-feedback-id="{{ $item->id }}">Comment</button>
+                                </div>
                             @else
                                 <div class="alert alert-info">
-                                    Comments are disabled for this feedback.
+                                    Please login for comments and vote
                                 </div>
                             @endif
-
-                            <div class="comments-section" id="commentsSection_{{ $item->id }}">
-                                @foreach ($item->comments as $val)
-                                    <div class="commented-section mt-2 rounded-sm bg-light p-3">
-                                        <div class="d-flex flex-row commented-user add-comment-section">
-                                            <h5>{{ $val->user->name }}</h5>
-                                            <span class="text-muted ml-auto">{{ $val->created_at }}</span>
-                                        </div>
-
-                                        <div class="comment-text-sm mt-2">
-                                            <span>{{ $val->content }}</span>
-                                        </div>
-                                    </div>
-                                @endforeach
+                        @else
+                            <div class="alert alert-info">
+                                Comments are disabled for this feedback.
                             </div>
+                        @endif
+
+                        <div class="comments-section" id="commentsSection_{{ $item->id }}">
+                            @foreach ($item->comments as $val)
+                                <div class="commented-section mt-2 rounded-sm bg-light p-3">
+                                    <div class="d-flex flex-row commented-user add-comment-section">
+                                        <h5>{{ $val->user->name }}</h5>
+                                        <span class="text-muted ml-auto">{{ $val->created_at }}</span>
+                                    </div>
+
+                                    <div class="comment-text-sm mt-2">
+                                        <span>{{ $val->content }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
-    @else
+        </div>
+    @endforeach
+
+    @if (!$feedbacks->count() === 0)
         <div class="container mt-5 mb-5">
             <div class="alert alert-info text-center">
                 Currently, there is no feedback available
